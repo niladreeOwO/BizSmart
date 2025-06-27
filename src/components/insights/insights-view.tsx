@@ -1,0 +1,139 @@
+'use client';
+
+import * as React from 'react';
+import { getFinancialInsights } from '@/app/insights/actions';
+import type { FinancialInsight } from '@/lib/types';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Terminal } from 'lucide-react';
+import InsightCard from './insight-card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '../ui/card';
+import { Flame, Target, WandSparkles } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+
+export default function InsightsView() {
+  const [insights, setInsights] = React.useState<FinancialInsight | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  const { toast } = useToast();
+
+  const fetchInsights = React.useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await getFinancialInsights();
+      setInsights(result);
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : 'An unknown error occurred';
+      setError(errorMessage);
+      toast({
+        variant: 'destructive',
+        title: 'Insight Generation Failed',
+        description: errorMessage,
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [toast]);
+
+  React.useEffect(() => {
+    fetchInsights();
+  }, [fetchInsights]);
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <Skeleton className="h-36 rounded-lg" />
+          <Skeleton className="h-36 rounded-lg" />
+          <Skeleton className="h-36 rounded-lg" />
+        </div>
+        <Skeleton className="h-48 rounded-lg" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Alert variant="destructive">
+        <Terminal className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>{error}</AlertDescription>
+        <Button onClick={fetchInsights} variant="secondary" className="mt-4">
+          Retry
+        </Button>
+      </Alert>
+    );
+  }
+
+  if (!insights) {
+    return (
+      <div className="text-center">
+        <p>No insights available.</p>
+        <Button onClick={fetchInsights} className="mt-4">
+          Generate Insights
+        </Button>
+      </div>
+    );
+  }
+  
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
+
+
+  return (
+    <div className="space-y-6">
+      <Button onClick={fetchInsights} disabled={loading}>
+        {loading ? 'Generating...' : 'Refresh Insights'}
+      </Button>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <InsightCard
+          title="Monthly Burn Rate"
+          value={formatCurrency(insights.burnRate)}
+          icon={Flame}
+          color="text-orange-500"
+        />
+        <InsightCard
+          title="Top Expense Category"
+          value={insights.topExpenseCategory}
+          icon={Target}
+          color="text-red-500"
+        />
+        <InsightCard
+          title="Financial Summary"
+          value={insights.summary}
+          icon={WandSparkles}
+          color="text-blue-500"
+          isSummary
+        />
+      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>AI Suggestions</CardTitle>
+          <CardDescription>
+            Actionable advice to improve your financial health.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2 list-disc list-inside text-muted-foreground">
+            {insights.suggestions.map((suggestion, index) => (
+              <li key={index}>{suggestion}</li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
