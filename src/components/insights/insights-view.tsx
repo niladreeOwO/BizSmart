@@ -17,6 +17,7 @@ import {
 } from '../ui/card';
 import { Flame, Target, WandSparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { formatCurrency } from '@/lib/utils';
 
 export default function InsightsView() {
   const [insights, setInsights] = React.useState<FinancialInsight | null>(null);
@@ -84,14 +85,6 @@ export default function InsightsView() {
       </div>
     );
   }
-  
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
-  };
-
 
   return (
     <div className="space-y-6">

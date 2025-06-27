@@ -1,6 +1,7 @@
-import { DollarSign, ArrowUpCircle, ArrowDownCircle, Landmark } from 'lucide-react';
+import { ArrowDownCircle, ArrowUpCircle, Landmark } from 'lucide-react';
 import StatCard from '@/components/dashboard/stat-card';
 import { transactions } from '@/lib/data';
+import { formatCurrency } from '@/lib/utils';
 
 export default function DashboardPage() {
   const totalIncome = transactions
@@ -12,13 +13,6 @@ export default function DashboardPage() {
     .reduce((sum, t) => sum + t.amount, 0);
 
   const netProfit = totalIncome - totalExpenses;
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
-  };
 
   return (
     <div className="flex flex-col gap-6">

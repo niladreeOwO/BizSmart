@@ -14,7 +14,7 @@ import {
   categories,
   paymentMethods,
 } from '@/lib/data';
-import type { Transaction } from '@/lib/lib/types';
+import type { Transaction } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -32,16 +32,14 @@ import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
-import { cn } from '@/lib/utils';
+import { cn, formatCurrency } from '@/lib/utils';
 
 export default function TransactionsPage() {
-  const [transactions, setTransactions] =
-    React.useState<Transaction[]>(allTransactions);
   const [category, setCategory] = React.useState('all');
   const [paymentMethod, setPaymentMethod] = React.useState('all');
   const [date, setDate] = React.useState<DateRange | undefined>();
 
-  React.useEffect(() => {
+  const filteredTransactions = React.useMemo(() => {
     let filtered = allTransactions;
 
     if (category !== 'all') {
@@ -51,26 +49,22 @@ export default function TransactionsPage() {
       filtered = filtered.filter((t) => t.paymentMethod === paymentMethod);
     }
     if (date?.from && date?.to) {
+      const toDate = new Date(date.to);
+      toDate.setHours(23, 59, 59, 999); // Ensure the end date is inclusive
+
       filtered = filtered.filter((t) => {
         const transactionDate = new Date(t.date);
-        return transactionDate >= date.from! && transactionDate <= date.to!;
+        return transactionDate >= date.from! && transactionDate <= toDate;
       });
     }
 
-    setTransactions(filtered);
+    return filtered;
   }, [category, paymentMethod, date]);
 
   const clearFilters = () => {
     setCategory('all');
     setPaymentMethod('all');
     setDate(undefined);
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
   };
 
   return (
@@ -103,7 +97,7 @@ export default function TransactionsPage() {
               ))}
             </SelectContent>
           </Select>
-           <Popover>
+          <Popover>
             <PopoverTrigger asChild>
               <Button
                 id="date"
@@ -140,7 +134,9 @@ export default function TransactionsPage() {
             </PopoverContent>
           </Popover>
         </div>
-        <Button variant="ghost" onClick={clearFilters}>Clear Filters</Button>
+        <Button variant="ghost" onClick={clearFilters}>
+          Clear Filters
+        </Button>
       </div>
 
       <div className="border rounded-lg overflow-hidden bg-card">
@@ -155,8 +151,8 @@ export default function TransactionsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {transactions.length > 0 ? (
-              transactions.map((t) => (
+            {filteredTransactions.length > 0 ? (
+              filteredTransactions.map((t) => (
                 <TableRow key={t.id}>
                   <TableCell className="font-medium">
                     {format(new Date(t.date), 'MMM dd, yyyy')}
@@ -167,7 +163,9 @@ export default function TransactionsPage() {
                     <Badge
                       variant={t.type === 'income' ? 'default' : 'secondary'}
                       className={cn(
-                        t.type === 'income' ? 'bg-primary/20 text-primary' : 'bg-destructive/20 text-destructive'
+                        t.type === 'income'
+                          ? 'bg-primary/20 text-primary'
+                          : 'bg-destructive/20 text-destructive'
                       )}
                     >
                       {t.type}
