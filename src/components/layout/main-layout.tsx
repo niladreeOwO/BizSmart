@@ -48,11 +48,14 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen">
-        <Sidebar className="flex flex-col">
-          <SidebarHeader className="p-4">
-            <Link href="/dashboard" className="flex items-center gap-2">
-              <BotMessageSquare className="h-8 w-8 text-primary" />
-              <h1 className="text-xl font-bold font-headline text-foreground">
+        <Sidebar className="flex flex-col group" collapsible="icon">
+          <SidebarHeader className="p-4 group-data-[state=collapsed]:p-2">
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2 group-data-[state=collapsed]:justify-center"
+            >
+              <BotMessageSquare className="h-8 w-8 text-primary shrink-0" />
+              <h1 className="text-xl font-bold font-headline text-foreground group-data-[state=collapsed]:hidden">
                 BizSmart
               </h1>
             </Link>
@@ -75,25 +78,40 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               ))}
             </SidebarMenu>
           </SidebarContent>
-          <SidebarFooter className="p-4">
+          <SidebarFooter className="p-4 group-data-[state=collapsed]:p-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="w-full justify-start gap-2 p-2 h-auto">
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start group-data-[state=collapsed]:justify-center gap-2 p-2 h-auto"
+                >
                   <Avatar className="h-8 w-8">
-                    <AvatarImage src="https://placehold.co/40x40.png" alt="User" data-ai-hint="person avatar"/>
+                    <AvatarImage
+                      src="https://placehold.co/40x40.png"
+                      alt="User"
+                      data-ai-hint="person avatar"
+                    />
                     <AvatarFallback>U</AvatarFallback>
                   </Avatar>
                   <div className="text-left hidden group-data-[state=expanded]:block">
                     <p className="text-sm font-medium">SME Owner</p>
-                    <p className="text-xs text-muted-foreground">admin@bizsmart.co</p>
+                    <p className="text-xs text-muted-foreground">
+                      admin@bizsmart.co
+                    </p>
                   </div>
-                   <ChevronDown className="ml-auto h-4 w-4 hidden group-data-[state=expanded]:block" />
+                  <ChevronDown className="ml-auto h-4 w-4 hidden group-data-[state=expanded]:block" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56 mb-2" align="end" forceMount>
+              <DropdownMenuContent
+                className="w-56 mb-2"
+                align="end"
+                forceMount
+              >
                 <DropdownMenuLabel className="font-normal">
                   <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">SME Owner</p>
+                    <p className="text-sm font-medium leading-none">
+                      SME Owner
+                    </p>
                     <p className="text-xs leading-none text-muted-foreground">
                       admin@bizsmart.co
                     </p>
@@ -116,9 +134,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
         <SidebarInset className="flex-1 bg-background">
           <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-6">
-            <SidebarTrigger className="md:hidden" />
+            <SidebarTrigger />
             <h2 className="text-2xl font-bold text-foreground">
-              {navItems.find((item) => item.href === pathname)?.label || 'Dashboard'}
+              {navItems.find((item) => item.href === pathname)?.label ||
+                'Dashboard'}
             </h2>
           </header>
           <main className="flex-1 p-6">{children}</main>
