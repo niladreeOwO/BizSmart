@@ -12,8 +12,8 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
-  SidebarTrigger,
   SidebarInset,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import {
   DropdownMenu,
@@ -42,6 +42,23 @@ const navItems = [
   { href: '/insights', label: 'AI Insights', icon: BrainCircuit },
 ];
 
+const AppSidebarHeader = () => {
+  const { toggleSidebar } = useSidebar();
+  return (
+    <SidebarHeader className="p-4 group-data-[state=collapsed]:p-2">
+      <button
+        onClick={toggleSidebar}
+        className="flex items-center w-full justify-start group-data-[state=collapsed]:justify-center gap-2"
+      >
+        <BotMessageSquare className="h-8 w-8 text-primary shrink-0" />
+        <h1 className="text-xl font-bold font-headline text-foreground group-data-[state=collapsed]:hidden">
+          BizSmart
+        </h1>
+      </button>
+    </SidebarHeader>
+  );
+};
+
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
@@ -49,17 +66,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <SidebarProvider>
       <div className="flex min-h-screen">
         <Sidebar className="flex flex-col group" collapsible="icon">
-          <SidebarHeader className="p-4 group-data-[state=collapsed]:p-2">
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-2 group-data-[state=collapsed]:justify-center"
-            >
-              <BotMessageSquare className="h-8 w-8 text-primary shrink-0" />
-              <h1 className="text-xl font-bold font-headline text-foreground group-data-[state=collapsed]:hidden">
-                BizSmart
-              </h1>
-            </Link>
-          </SidebarHeader>
+          <AppSidebarHeader />
           <SidebarContent className="flex-1 p-4">
             <SidebarMenu>
               {navItems.map((item) => (
@@ -134,7 +141,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
         <SidebarInset className="flex-1 bg-background">
           <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-6">
-            <SidebarTrigger />
             <h2 className="text-2xl font-bold text-foreground">
               {navItems.find((item) => item.href === pathname)?.label ||
                 'Dashboard'}
