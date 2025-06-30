@@ -102,8 +102,8 @@ function AppShell({ children }: { children: React.ReactNode }) {
                   <AvatarFallback>U</AvatarFallback>
                 </Avatar>
                 <div className="text-left hidden group-data-[state=expanded]:block">
-                  <p className="text-sm font-medium">SME Owner</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-base font-medium">SME Owner</p>
+                  <p className="text-sm text-muted-foreground">
                     admin@bizsmart.co
                   </p>
                 </div>
@@ -117,10 +117,10 @@ function AppShell({ children }: { children: React.ReactNode }) {
             >
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">
+                  <p className="text-base font-medium leading-none">
                     SME Owner
                   </p>
-                  <p className="text-xs leading-none text-muted-foreground">
+                  <p className="text-sm leading-none text-muted-foreground">
                     admin@bizsmart.co
                   </p>
                 </div>

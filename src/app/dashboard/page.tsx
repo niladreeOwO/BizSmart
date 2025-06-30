@@ -55,8 +55,8 @@ export default function DashboardPage() {
   const recentTransactions = transactions.slice(0, 5);
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <div className="flex flex-col gap-6 motion-safe:animate-fade-in">
+      <div className="grid gap-6 md:grid-cols-2">
         <StatCard
           title="Total Income"
           value={formatCurrency(totalIncome)}
@@ -97,7 +97,7 @@ export default function DashboardPage() {
       </div>
 
       <Card>
-        <CardHeader>
+        <CardHeader className="border-b">
           <CardTitle>Recent Transactions</CardTitle>
           <CardDescription>
             Showing the last 5 transactions.

@@ -87,7 +87,7 @@ export default function InsightsView() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 motion-safe:animate-fade-in">
       <Button onClick={fetchInsights} disabled={loading}>
         {loading ? 'Generating...' : 'Refresh Insights'}
       </Button>
@@ -113,7 +113,7 @@ export default function InsightsView() {
         />
       </div>
       <Card>
-        <CardHeader>
+        <CardHeader className="border-b">
           <CardTitle>AI Suggestions</CardTitle>
           <CardDescription>
             Actionable advice to improve your financial health.
