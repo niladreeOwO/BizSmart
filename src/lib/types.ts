@@ -1,3 +1,5 @@
+import type { User as FirebaseUser } from 'firebase/auth';
+
 export type Transaction = {
   id: string;
   userId: string;
@@ -15,3 +17,5 @@ export type FinancialInsight = {
   topExpenseCategory: string;
   suggestions: string[];
 };
+
+export type User = FirebaseUser;

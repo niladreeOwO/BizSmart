@@ -36,6 +36,7 @@ import {
   PanelLeft,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/auth-context';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -63,6 +64,7 @@ const AppSidebarHeader = () => {
 function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { toggleSidebar } = useSidebar();
+  const { user, logout } = useAuth();
 
   return (
     <div className="flex min-h-screen">
@@ -87,77 +89,80 @@ function AppShell({ children }: { children: React.ReactNode }) {
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter className="p-4 group-data-[state=collapsed]:p-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                className="w-full justify-start group-data-[state=collapsed]:justify-center gap-2 p-2 h-auto"
+          {user && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start group-data-[state=collapsed]:justify-center gap-2 p-2 h-auto"
+                >
+                  <Avatar className="h-8 w-8">
+                    <AvatarImage
+                      src={user.photoURL ?? 'https://placehold.co/40x40.png'}
+                      alt={user.displayName ?? 'User'}
+                      data-ai-hint="person avatar"
+                    />
+                    <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                  <div className="text-left hidden group-data-[state=expanded]:block">
+                    <p className="text-base font-medium truncate">
+                      {user.displayName ?? 'SME Owner'}
+                    </p>
+                    <p className="text-sm text-muted-foreground truncate">
+                      {user.email}
+                    </p>
+                  </div>
+                  <ChevronDown className="ml-auto h-4 w-4 hidden group-data-[state=expanded]:block" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                className="w-56 mb-2"
+                align="end"
+                forceMount
               >
-                <Avatar className="h-8 w-8">
-                  <AvatarImage
-                    src="https://placehold.co/40x40.png"
-                    alt="User"
-                    data-ai-hint="person avatar"
-                  />
-                  <AvatarFallback>U</AvatarFallback>
-                </Avatar>
-                <div className="text-left hidden group-data-[state=expanded]:block">
-                  <p className="text-base font-medium">SME Owner</p>
-                  <p className="text-sm text-muted-foreground">
-                    admin@bizsmart.co
-                  </p>
-                </div>
-                <ChevronDown className="ml-auto h-4 w-4 hidden group-data-[state=expanded]:block" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent
-              className="w-56 mb-2"
-              align="end"
-              forceMount
-            >
-              <DropdownMenuLabel className="font-normal">
-                <div className="flex flex-col space-y-1">
-                  <p className="text-base font-medium leading-none">
-                    SME Owner
-                  </p>
-                  <p className="text-sm leading-none text-muted-foreground">
-                    admin@bizsmart.co
-                  </p>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Settings className="mr-2 h-4 w-4" />
-                <span>Settings</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-base font-medium leading-none">
+                      {user.displayName ?? 'SME Owner'}
+                    </p>
+                    <p className="text-sm leading-none text-muted-foreground">
+                      {user.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={logout}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </SidebarFooter>
       </Sidebar>
 
       <SidebarInset className="flex-1 bg-background">
         <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 backdrop-blur-sm px-6">
-          <div>
+          <div className="md:hidden">
             <Link
               href="/dashboard"
-              className="flex items-center gap-2 md:hidden"
+              className="flex items-center gap-2"
             >
               <BotMessageSquare className="h-8 w-8 text-primary shrink-0" />
               <h1 className="text-xl font-bold font-headline text-foreground">
                 BizSmart
               </h1>
             </Link>
-            <h2 className="hidden text-2xl font-bold text-foreground md:block">
+          </div>
+           <h2 className="hidden text-2xl font-bold text-foreground md:block">
               {navItems.find((item) => item.href === pathname)?.label ||
                 'Dashboard'}
             </h2>
-          </div>
-
           <Button
             variant="ghost"
             size="icon"
