@@ -46,7 +46,7 @@ const navItems = [
 const AppSidebarHeader = () => {
   const { toggleSidebar } = useSidebar();
   return (
-    <SidebarHeader className="p-4 group-data-[state=collapsed]:p-2">
+    <SidebarHeader className="hidden p-4 group-data-[state=collapsed]:p-2 md:flex">
       <button
         onClick={toggleSidebar}
         className="flex items-center w-full justify-start group-data-[state=collapsed]:justify-center gap-2"
@@ -141,7 +141,23 @@ function AppShell({ children }: { children: React.ReactNode }) {
       </Sidebar>
 
       <SidebarInset className="flex-1 bg-background">
-        <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-6">
+        <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 backdrop-blur-sm px-6">
+          <div>
+            <Link
+              href="/dashboard"
+              className="flex items-center gap-2 md:hidden"
+            >
+              <BotMessageSquare className="h-8 w-8 text-primary shrink-0" />
+              <h1 className="text-xl font-bold font-headline text-foreground">
+                BizSmart
+              </h1>
+            </Link>
+            <h2 className="hidden text-2xl font-bold text-foreground md:block">
+              {navItems.find((item) => item.href === pathname)?.label ||
+                'Dashboard'}
+            </h2>
+          </div>
+
           <Button
             variant="ghost"
             size="icon"
@@ -151,10 +167,6 @@ function AppShell({ children }: { children: React.ReactNode }) {
             <PanelLeft className="h-5 w-5" />
             <span className="sr-only">Toggle Menu</span>
           </Button>
-          <h2 className="text-2xl font-bold text-foreground">
-            {navItems.find((item) => item.href === pathname)?.label ||
-              'Dashboard'}
-          </h2>
         </header>
         <main className="flex-1 p-6">{children}</main>
       </SidebarInset>
@@ -162,7 +174,11 @@ function AppShell({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default function MainLayout({ children }: { children: React.ReactNode }) {
+export default function MainLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <SidebarProvider>
       <AppShell>{children}</AppShell>
