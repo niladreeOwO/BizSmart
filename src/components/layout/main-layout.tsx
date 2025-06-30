@@ -40,8 +40,8 @@ import { useAuth } from '@/context/auth-context';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/transactions', label: 'Transactions', icon: Wallet },
-  { href: '/insights', label: 'AI Insights', icon: BrainCircuit },
+  { href: '/dashboard/transactions', label: 'Transactions', icon: Wallet },
+  { href: '/dashboard/insights', label: 'AI Insights', icon: BrainCircuit },
 ];
 
 const AppSidebarHeader = () => {
@@ -65,6 +65,11 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { toggleSidebar } = useSidebar();
   const { user, logout } = useAuth();
+  
+  const currentNavItem = navItems
+      .slice()
+      .sort((a, b) => b.href.length - a.href.length)
+      .find((item) => pathname.startsWith(item.href));
 
   return (
     <div className="flex min-h-screen">
@@ -160,8 +165,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           </div>
            <h2 className="hidden text-2xl font-bold text-foreground md:block">
-              {navItems.find((item) => item.href === pathname)?.label ||
-                'Dashboard'}
+              {currentNavItem?.label || 'Dashboard'}
             </h2>
           <Button
             variant="ghost"
