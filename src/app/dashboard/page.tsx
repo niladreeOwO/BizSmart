@@ -134,14 +134,14 @@ export default function DashboardPage() {
                         </Button>
                     </CardHeader>
                     <CardContent className="p-0">
-                    <Table className="table-fixed">
+                    <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead className="w-1/5">Date</TableHead>
-                                <TableHead className="w-1/5">Type</TableHead>
-                                <TableHead className="text-right w-1/5">Amount</TableHead>
-                                <TableHead className="w-1/5">Category</TableHead>
-                                <TableHead className="w-1/5">Notes</TableHead>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Type</TableHead>
+                                <TableHead className="text-right">Amount</TableHead>
+                                <TableHead>Category</TableHead>
+                                <TableHead>Notes</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>

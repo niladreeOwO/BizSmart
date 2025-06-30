@@ -140,14 +140,14 @@ export default function TransactionsPage() {
       </div>
 
       <div className="border rounded-lg overflow-hidden bg-card">
-        <Table className="table-fixed">
+        <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-1/6">Date</TableHead>
-              <TableHead className="w-2/6">Description</TableHead>
-              <TableHead className="w-1/6">Category</TableHead>
-              <TableHead className="w-1/6">Type</TableHead>
-              <TableHead className="text-right w-1/6">Amount</TableHead>
+              <TableHead>Date</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Category</TableHead>
+              <TableHead>Type</TableHead>
+              <TableHead className="text-right">Amount</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
