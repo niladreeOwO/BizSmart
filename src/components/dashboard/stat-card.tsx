@@ -31,7 +31,7 @@ export default function StatCard({
         <Icon className={cn('h-5 w-5 text-muted-foreground', color)} />
       </CardHeader>
       <CardContent>
-        <div className={cn('text-3xl font-bold', valueColor)}>{value}</div>
+        <div className={cn('text-3xl font-bold break-all', valueColor)}>{value}</div>
         <p className="text-xs text-muted-foreground pt-1 break-words">{description}</p>
       </CardContent>
     </Card>
