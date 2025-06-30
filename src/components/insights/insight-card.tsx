@@ -25,7 +25,7 @@ export default function InsightCard({
       <CardContent className="flex-1">
         <div
           className={cn(
-            'font-bold',
+            'font-bold break-words',
             isSummary ? 'text-base' : 'text-2xl'
           )}
         >

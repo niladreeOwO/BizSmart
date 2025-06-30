@@ -140,14 +140,14 @@ export default function TransactionsPage() {
       </div>
 
       <div className="border rounded-lg overflow-hidden bg-card">
-        <Table>
+        <Table className="table-fixed">
           <TableHeader>
             <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Description</TableHead>
-              <TableHead>Category</TableHead>
-              <TableHead>Type</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
+              <TableHead className="w-1/6">Date</TableHead>
+              <TableHead className="w-2/6">Description</TableHead>
+              <TableHead className="w-1/6">Category</TableHead>
+              <TableHead className="w-1/6">Type</TableHead>
+              <TableHead className="text-right w-1/6">Amount</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -157,7 +157,7 @@ export default function TransactionsPage() {
                   <TableCell className="font-medium">
                     {format(new Date(t.date), 'MMM dd, yyyy')}
                   </TableCell>
-                  <TableCell>{t.description}</TableCell>
+                  <TableCell className="break-words">{t.description}</TableCell>
                   <TableCell>{t.category}</TableCell>
                   <TableCell>
                     <Badge

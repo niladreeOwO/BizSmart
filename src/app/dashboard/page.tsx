@@ -134,14 +134,14 @@ export default function DashboardPage() {
                         </Button>
                     </CardHeader>
                     <CardContent className="p-0">
-                    <Table>
+                    <Table className="table-fixed">
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Date</TableHead>
-                                <TableHead>Type</TableHead>
-                                <TableHead className="text-right">Amount</TableHead>
-                                <TableHead>Category</TableHead>
-                                <TableHead>Notes</TableHead>
+                                <TableHead className="w-1/5">Date</TableHead>
+                                <TableHead className="w-1/5">Type</TableHead>
+                                <TableHead className="text-right w-1/5">Amount</TableHead>
+                                <TableHead className="w-1/5">Category</TableHead>
+                                <TableHead className="w-1/5">Notes</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -175,7 +175,7 @@ export default function DashboardPage() {
                                 <TableCell>
                                     <Badge variant="outline">{t.category}</Badge>
                                 </TableCell>
-                                <TableCell>{t.description}</TableCell>
+                                <TableCell className="break-words">{t.description}</TableCell>
                                 </TableRow>
                             ))
                         ) : (
@@ -199,7 +199,7 @@ export default function DashboardPage() {
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-secondary-foreground mb-2">
+                        <p className="text-secondary-foreground mb-2 break-words">
                             You're spending more on supplies this week. Consider buying in bulk to save costs.
                         </p>
                         <Button variant="link" className="px-0 h-auto text-primary font-semibold">

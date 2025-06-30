@@ -122,7 +122,7 @@ export default function InsightsView() {
         <CardContent>
           <ul className="space-y-2 list-disc list-inside text-muted-foreground">
             {insights.suggestions.map((suggestion, index) => (
-              <li key={index}>{suggestion}</li>
+              <li key={index} className="break-words">{suggestion}</li>
             ))}
           </ul>
         </CardContent>

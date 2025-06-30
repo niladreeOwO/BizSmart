@@ -32,7 +32,7 @@ export default function StatCard({
       </CardHeader>
       <CardContent>
         <div className={cn('text-3xl font-bold', valueColor)}>{value}</div>
-        <p className="text-xs text-muted-foreground pt-1">{description}</p>
+        <p className="text-xs text-muted-foreground pt-1 break-words">{description}</p>
       </CardContent>
     </Card>
   );
