@@ -1,39 +1,29 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 interface StatCardProps {
   title: string;
   value: string;
-  icon: React.ElementType;
-  description: string;
-  color?: string;
-  valueColor?: string;
+  change: string;
 }
 
-export default function StatCard({
-  title,
-  value,
-  icon: Icon,
-  description,
-  color = 'text-foreground',
-  valueColor = 'text-foreground',
-}: StatCardProps) {
+export default function StatCard({ title, value, change }: StatCardProps) {
+  const isPositive = change.startsWith('+');
+
   return (
-    <Card className="transition-all hover:shadow-md">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className={cn('h-5 w-5 text-muted-foreground', color)} />
-      </CardHeader>
-      <CardContent>
-        <div className={cn('text-3xl font-bold break-all', valueColor)}>{value}</div>
-        <p className="text-xs text-muted-foreground pt-1 break-words">{description}</p>
-      </CardContent>
+    <Card className="transition-all hover:shadow-md p-6">
+      <div className="space-y-2">
+        <p className="text-sm font-medium text-muted-foreground">{title}</p>
+        <p className="text-3xl font-bold">{value}</p>
+        <p
+          className={cn(
+            'text-sm font-semibold',
+            isPositive ? 'text-green-600' : 'text-destructive'
+          )}
+        >
+          {change}
+        </p>
+      </div>
     </Card>
   );
 }

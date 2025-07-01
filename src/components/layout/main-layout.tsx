@@ -107,7 +107,12 @@ function AppShell({ children }: { children: React.ReactNode }) {
               </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
-        <SidebarFooter className="p-4 group-data-[state=collapsed]:p-2">
+        <SidebarFooter className="p-4 mt-auto group-data-[state=collapsed]:p-2">
+           <div className="group-data-[state=expanded]:block hidden mb-4">
+            <Button className="w-full">
+              Add Transaction
+            </Button>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
@@ -121,7 +126,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
                   />
                   <AvatarFallback>{user?.email?.[0].toUpperCase()}</AvatarFallback>
                 </Avatar>
-                <div className="text-left hidden group-data-[state=expanded]:block">
+                <div className="text-left hidden group-data-[expanded]:block">
                   <p className="text-base font-medium truncate">
                     {user?.displayName || 'SME Owner'}
                   </p>
@@ -200,5 +205,3 @@ export default function MainLayout({
     </SidebarProvider>
   );
 }
-
-    
