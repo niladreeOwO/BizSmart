@@ -55,7 +55,7 @@ export default function DashboardPage() {
 
       <Button
         onClick={() => setIsDialogOpen(true)}
-        className="fixed bottom-8 right-8 h-16 w-16 rounded-full shadow-lg"
+        className="fixed bottom-28 right-8 h-16 w-16 rounded-full shadow-lg"
         size="icon"
         aria-label="Add Quick Entry"
       >
