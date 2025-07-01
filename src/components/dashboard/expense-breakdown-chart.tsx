@@ -61,9 +61,8 @@ export default function ExpenseBreakdownChart() {
               type="category"
               tickLine={false}
               axisLine={false}
-              stroke="hsl(var(--muted-foreground))"
+              stroke="hsl(var(--foreground))"
               fontSize={12}
-              width={90}
             />
             <Tooltip
               contentStyle={{

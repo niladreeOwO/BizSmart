@@ -14,7 +14,7 @@ export default function StatCard({ title, value, change }: StatCardProps) {
     <Card className="transition-all hover:shadow-md p-4 sm:p-6">
       <div className="space-y-2">
         <p className="text-sm font-medium text-muted-foreground">{title}</p>
-        <p className="text-2xl font-bold md:text-3xl">{value}</p>
+        <p className="text-xl font-bold sm:text-2xl lg:text-3xl">{value}</p>
         <p
           className={cn(
             'text-sm font-semibold',
