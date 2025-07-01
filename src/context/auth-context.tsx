@@ -1,12 +1,12 @@
 'use client';
 
 import * as React from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onIdTokenChanged } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import type { User } from '@/lib/types';
 import { logout as serverLogout } from '@/app/auth/actions';
-import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
+import { BotMessageSquare } from 'lucide-react';
 
 interface AuthContextType {
   user: User | null;
@@ -23,10 +23,9 @@ const AuthContext = React.createContext<AuthContextType>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(null);
   const [loading, setLoading] = React.useState(true);
-  const router = useRouter();
 
   React.useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onIdTokenChanged(auth, async (user) => {
       setUser(user);
       setLoading(false);
     });
@@ -37,7 +36,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     await serverLogout();
     setUser(null);
-    router.push('/login');
   };
 
   const value = {
@@ -48,13 +46,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   if (loading) {
      return (
-        <div className="flex h-screen w-full items-center justify-center">
+        <div className="flex h-screen w-full items-center justify-center bg-background">
             <div className="flex flex-col items-center gap-4">
-                <Skeleton className="h-12 w-12 rounded-full" />
-                <div className="space-y-2">
-                    <Skeleton className="h-4 w-[250px]" />
-                    <Skeleton className="h-4 w-[200px]" />
-                </div>
+                <BotMessageSquare className="h-12 w-12 text-primary animate-pulse" />
+                <p className="text-muted-foreground">Loading BizSmart...</p>
             </div>
         </div>
      )
@@ -64,5 +59,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 export const useAuth = () => {
-  return React.useContext(AuthContext);
+  const context = React.useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };

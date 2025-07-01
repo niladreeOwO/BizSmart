@@ -23,7 +23,7 @@ export const createSessionCookie = async (idToken: string, options: { expiresIn:
 }
 
 export const revokeSessionCookie = async (sessionCookie: string) => {
-    const decodedClaims = await auth.verifySessionCookie(sessionCookie);
+    const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
     return await auth.revokeRefreshTokens(decodedClaims.sub);
 }
 

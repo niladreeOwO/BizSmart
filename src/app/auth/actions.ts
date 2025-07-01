@@ -8,6 +8,14 @@ import {
 } from 'firebase/auth';
 import { auth as clientAuth } from '@/lib/firebase'; // This is the client auth
 import { createSessionCookie, revokeSessionCookie } from '@/lib/firebase-admin';
+import { redirect } from 'next/navigation';
+
+const FIVE_DAYS_IN_MS = 60 * 60 * 24 * 5 * 1000;
+
+async function createSession(idToken: string) {
+  const sessionCookie = await createSessionCookie(idToken, { expiresIn: FIVE_DAYS_IN_MS });
+  cookies().set('session', sessionCookie, { maxAge: FIVE_DAYS_IN_MS, httpOnly: true, secure: true });
+}
 
 export async function login(data: any) {
   try {
@@ -18,10 +26,8 @@ export async function login(data: any) {
       data.password
     );
     const idToken = await userCredential.user.getIdToken();
-    const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
-
-    const sessionCookie = await createSessionCookie(idToken, { expiresIn });
-    cookies().set('session', sessionCookie, { maxAge: expiresIn, httpOnly: true, secure: true });
+    
+    await createSession(idToken);
 
     return { success: true };
   } catch (error: any) {
@@ -38,12 +44,8 @@ export async function signup(data: any) {
       data.password
     );
 
-    // After signup, automatically log the user in
     const idToken = await userCredential.user.getIdToken();
-    const expiresIn = 60 * 60 * 24 * 5 * 1000; // 5 days
-    
-    const sessionCookie = await createSessionCookie(idToken, { expiresIn });
-    cookies().set('session', sessionCookie, { maxAge: expiresIn, httpOnly: true, secure: true });
+    await createSession(idToken);
     
     return { success: true };
   } catch (error: any) {
@@ -58,8 +60,8 @@ export async function logout() {
       await revokeSessionCookie(sessionCookie);
       cookies().delete('session');
     }
-    return { success: true };
   } catch (error: any) {
     return { error: error.message };
   }
+  redirect('/login');
 }

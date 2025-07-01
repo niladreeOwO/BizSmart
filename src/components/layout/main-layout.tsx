@@ -23,13 +23,25 @@ import {
   BrainCircuit,
   BotMessageSquare,
   PanelLeft,
+  Settings,
+  LogOut,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/context/auth-context';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/dashboard/transactions', label: 'Transactions', icon: Wallet },
   { href: '/dashboard/insights', label: 'AI Insights', icon: BrainCircuit },
+  { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ];
 
 const AppSidebarHeader = () => {
@@ -52,18 +64,12 @@ const AppSidebarHeader = () => {
 function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { toggleSidebar } = useSidebar();
-  
-  // Mock user data
-  const user = { 
-    email: 'sme-owner@bizsmart.com', 
-    displayName: 'SME Owner', 
-    photoURL: 'https://placehold.co/40x40.png' 
-  };
+  const { user, logout } = useAuth();
 
   const currentNavItem = navItems
-      .slice()
-      .sort((a, b) => b.href.length - a.href.length)
-      .find((item) => pathname.startsWith(item.href));
+    .slice()
+    .sort((a, b) => b.href.length - a.href.length)
+    .find((item) => pathname.startsWith(item.href));
 
   return (
     <div className="flex min-h-screen">
@@ -75,7 +81,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
                   asChild
-                  isActive={pathname === item.href}
+                  isActive={item.href === '/' ? pathname === item.href : pathname.startsWith(item.href)}
                   tooltip={item.label}
                 >
                   <Link href={item.href}>
@@ -88,32 +94,58 @@ function AppShell({ children }: { children: React.ReactNode }) {
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter className="p-4 group-data-[state=collapsed]:p-2">
-            <div
-              className="w-full justify-start group-data-[state=collapsed]:justify-center gap-2 p-2 h-auto flex items-center"
-            >
-              <Avatar className="h-8 w-8">
-                <AvatarImage
-                  src={user.photoURL ?? 'https://placehold.co/40x40.png'}
-                  alt={user.displayName ?? 'User'}
-                  data-ai-hint="person avatar"
-                />
-                <AvatarFallback>{user.email?.[0].toUpperCase()}</AvatarFallback>
-              </Avatar>
-              <div className="text-left hidden group-data-[state=expanded]:block">
-                <p className="text-base font-medium truncate">
-                  {user.displayName}
-                </p>
-                <p className="text-sm text-muted-foreground truncate">
-                  {user.email}
-                </p>
-              </div>
-            </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                className="w-full justify-start group-data-[state=collapsed]:justify-center gap-2 p-2 h-auto flex items-center rounded-md hover:bg-sidebar-accent"
+              >
+                <Avatar className="h-8 w-8">
+                  <AvatarImage
+                    src={user?.photoURL ?? 'https://placehold.co/40x40.png'}
+                    alt={user?.displayName ?? 'User'}
+                    data-ai-hint="person avatar"
+                  />
+                  <AvatarFallback>{user?.email?.[0].toUpperCase()}</AvatarFallback>
+                </Avatar>
+                <div className="text-left hidden group-data-[state=expanded]:block">
+                  <p className="text-base font-medium truncate">
+                    {user?.displayName || 'SME Owner'}
+                  </p>
+                  <p className="text-sm text-muted-foreground truncate">
+                    {user?.email}
+                  </p>
+                </div>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="right" align="end" className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={logout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </SidebarFooter>
       </Sidebar>
 
       <SidebarInset className="flex-1 bg-background">
         <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 backdrop-blur-sm px-6">
-          <div className="md:hidden">
+           <div className="flex items-center gap-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={toggleSidebar}
+            >
+              <PanelLeft className="h-5 w-5" />
+              <span className="sr-only">Toggle Menu</span>
+            </Button>
+            <h2 className="hidden text-2xl font-bold text-foreground md:block">
+              {currentNavItem?.label || 'Dashboard'}
+            </h2>
+          </div>
+           <div className="md:hidden">
             <Link
               href="/dashboard"
               className="flex items-center gap-2"
@@ -124,18 +156,6 @@ function AppShell({ children }: { children: React.ReactNode }) {
               </h1>
             </Link>
           </div>
-           <h2 className="hidden text-2xl font-bold text-foreground md:block">
-              {currentNavItem?.label || 'Dashboard'}
-            </h2>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={toggleSidebar}
-          >
-            <PanelLeft className="h-5 w-5" />
-            <span className="sr-only">Toggle Menu</span>
-          </Button>
         </header>
         <main className="flex-1 p-6">{children}</main>
       </SidebarInset>
