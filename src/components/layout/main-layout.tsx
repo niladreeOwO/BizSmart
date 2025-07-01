@@ -108,11 +108,6 @@ function AppShell({ children }: { children: React.ReactNode }) {
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter className="p-4 mt-auto group-data-[state=collapsed]:p-2">
-           <div className="group-data-[state=expanded]:block hidden mb-4">
-            <Button className="w-full">
-              Add Transaction
-            </Button>
-          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button
