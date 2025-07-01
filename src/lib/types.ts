@@ -24,3 +24,10 @@ export type FinancialInsight = {
   topExpenseCategory: string;
   suggestions: string[];
 };
+
+export type ChatMessage = {
+  role: 'user' | 'assistant';
+  content: string;
+};
+
+    

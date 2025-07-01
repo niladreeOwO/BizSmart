@@ -25,6 +25,7 @@ import {
   PanelLeft,
   Settings,
   LogOut,
+  MessageCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
@@ -36,6 +37,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
+import AIAssistant from '../chat/ai-assistant';
+
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -65,6 +69,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { toggleSidebar } = useSidebar();
   const { user, logout } = useAuth();
+  const [isAssistantOpen, setAssistantOpen] = React.useState(false);
 
   const currentNavItem = navItems
     .slice()
@@ -91,6 +96,15 @@ function AppShell({ children }: { children: React.ReactNode }) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
+             <SidebarMenuItem>
+                <SidebarMenuButton
+                  onClick={() => setAssistantOpen(true)}
+                  tooltip="AI Assistant"
+                >
+                  <MessageCircle className="h-5 w-5" />
+                  <span>AI Assistant</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter className="p-4 group-data-[state=collapsed]:p-2">
@@ -159,6 +173,18 @@ function AppShell({ children }: { children: React.ReactNode }) {
         </header>
         <main className="flex-1 p-6">{children}</main>
       </SidebarInset>
+
+      <Sheet open={isAssistantOpen} onOpenChange={setAssistantOpen}>
+        <SheetContent className="w-full max-w-lg p-0">
+           <SheetHeader className="p-4 border-b">
+            <SheetTitle className="flex items-center gap-2">
+                <BotMessageSquare className="h-6 w-6 text-primary" />
+                <span>AI Assistant</span>
+            </SheetTitle>
+          </SheetHeader>
+          <AIAssistant />
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
@@ -174,3 +200,5 @@ export default function MainLayout({
     </SidebarProvider>
   );
 }
+
+    
