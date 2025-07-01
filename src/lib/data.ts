@@ -134,12 +134,9 @@ export const transactions: Transaction[] = [
 ];
 
 export const categories = [
-  ...new Set(transactions.map((t) => t.category)),
-  'Transfer',
+  ...new Set([...transactions.map((t) => t.category), 'Transfer']),
 ];
 
 export const paymentMethods = [
-  ...new Set(transactions.map((t) => t.paymentMethod)),
-  'bKash',
-  'Cash',
+  ...new Set([...transactions.map((t) => t.paymentMethod), 'bKash', 'Cash']),
 ];
