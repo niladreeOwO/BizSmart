@@ -9,11 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import {
-  transactions as allTransactions,
-  categories,
-  paymentMethods,
-} from '@/lib/data';
+import { categories, paymentMethods } from '@/lib/data';
 import type { Transaction } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import {
@@ -47,30 +43,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogTrigger,
-  DialogClose,
-} from '@/components/ui/dialog';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Input } from '@/components/ui/input';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Textarea } from '@/components/ui/textarea';
+import AddEntryDialog from '@/components/transactions/add-entry-dialog';
+import { useTransactions } from '@/context/transactions-context';
 
 // Mobile-first Transaction Card component
 function TransactionCard({ transaction }: { transaction: Transaction }) {
@@ -118,55 +92,13 @@ function TransactionCard({ transaction }: { transaction: Transaction }) {
   );
 }
 
-const transactionFormSchema = z.object({
-  description: z
-    .string()
-    .min(2, { message: 'Description must be at least 2 characters.' })
-    .max(100, { message: 'Description must not be longer than 100 characters.' }),
-  amount: z.coerce.number().positive({ message: 'Amount must be positive.' }),
-  type: z.enum(['income', 'expense'], {
-    required_error: 'You need to select a transaction type.',
-  }),
-  date: z.date({
-    required_error: 'A date is required.',
-  }),
-  category: z.string({ required_error: 'Please select a category.' }),
-  paymentMethod: z.string({
-    required_error: 'Please select a payment method.',
-  }),
-});
-
 export default function TransactionsPage() {
-  const [transactions, setTransactions] = React.useState(allTransactions);
+  const { transactions } = useTransactions();
   const [category, setCategory] = React.useState('all');
   const [paymentMethod, setPaymentMethod] = React.useState('all');
   const [date, setDate] = React.useState<DateRange | undefined>();
   const [sortConfig, setSortConfig] = React.useState('date-desc');
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-
-  const form = useForm<z.infer<typeof transactionFormSchema>>({
-    resolver: zodResolver(transactionFormSchema),
-    defaultValues: {
-      type: 'expense',
-      date: new Date(),
-    },
-  });
-
-  function onSubmit(data: z.infer<typeof transactionFormSchema>) {
-    const newTransaction: Transaction = {
-      id: `txn_${Date.now()}`, // Simple unique ID
-      userId: 'user_123', // Mock user ID
-      amount: data.amount,
-      type: data.type,
-      category: data.category,
-      date: data.date.toISOString(),
-      paymentMethod: data.paymentMethod,
-      description: data.description,
-    };
-    setTransactions((prev) => [newTransaction, ...prev]);
-    form.reset({type: 'expense', date: new Date(), description: '', amount: undefined, category: undefined, paymentMethod: undefined});
-    setIsDialogOpen(false);
-  }
 
   const filteredTransactions = React.useMemo(() => {
     let filtered = [...transactions]; // Use a copy to avoid mutating state
@@ -295,211 +227,29 @@ export default function TransactionsPage() {
             </Popover>
           </div>
           <div className="flex flex-col md:flex-row items-center gap-4 pt-4 border-t mt-4">
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button>
-                  <PlusCircle className="mr-2" />
-                  Add Transaction
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Add New Transaction</DialogTitle>
-                  <DialogDescription>
-                    Fill in the details for your new transaction. Click save when
-                    you're done.
-                  </DialogDescription>
-                </DialogHeader>
-                <Form {...form}>
-                  <form
-                    onSubmit={form.handleSubmit(onSubmit)}
-                    className="space-y-4"
-                  >
-                    <FormField
-                      control={form.control}
-                      name="type"
-                      render={({ field }) => (
-                        <FormItem className="space-y-3">
-                          <FormLabel>Type</FormLabel>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                              className="flex gap-4"
-                            >
-                              <FormItem className="flex items-center space-x-2 space-y-0">
-                                <FormControl>
-                                  <RadioGroupItem value="income" />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  Income
-                                </FormLabel>
-                              </FormItem>
-                              <FormItem className="flex items-center space-x-2 space-y-0">
-                                <FormControl>
-                                  <RadioGroupItem value="expense" />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  Expense
-                                </FormLabel>
-                              </FormItem>
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="description"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Description (Notes)</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="e.g. Coffee for team meeting"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="amount"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Amount</FormLabel>
-                          <FormControl>
-                            <Input type="number" placeholder="0.00" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="date"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col">
-                          <FormLabel>Date</FormLabel>
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <FormControl>
-                                <Button
-                                  variant={'outline'}
-                                  className={cn(
-                                    'w-full pl-3 text-left font-normal',
-                                    !field.value && 'text-muted-foreground'
-                                  )}
-                                >
-                                  {field.value ? (
-                                    format(field.value, 'PPP')
-                                  ) : (
-                                    <span>Pick a date</span>
-                                  )}
-                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                </Button>
-                              </FormControl>
-                            </PopoverTrigger>
-                            <PopoverContent
-                              className="w-auto p-0"
-                              align="start"
-                            >
-                              <Calendar
-                                mode="single"
-                                selected={field.value}
-                                onSelect={field.onChange}
-                                disabled={(date) => date > new Date()}
-                                initialFocus
-                              />
-                            </PopoverContent>
-                          </Popover>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="category"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Category</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a category" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {categories.map((cat) => (
-                                <SelectItem key={cat} value={cat}>
-                                  {cat}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                     <FormField
-                      control={form.control}
-                      name="paymentMethod"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Payment Method</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select a payment method" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {paymentMethods.map((method) => (
-                                <SelectItem key={method} value={method}>
-                                  {method}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <DialogFooter>
-                      <DialogClose asChild>
-                        <Button type="button" variant="outline">
-                          Cancel
-                        </Button>
-                      </DialogClose>
-                      <Button type="submit">Save Transaction</Button>
-                    </DialogFooter>
-                  </form>
-                </Form>
-              </DialogContent>
-            </Dialog>
+            <Button onClick={() => setIsDialogOpen(true)}>
+              <PlusCircle className="mr-2" />
+              Add Transaction
+            </Button>
+            <AddEntryDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
 
             <div className="flex items-center gap-2">
-                <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
-                <Select value={sortConfig} onValueChange={setSortConfig}>
+              <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+              <Select value={sortConfig} onValueChange={setSortConfig}>
                 <SelectTrigger className="w-full md:w-[220px]">
-                    <SelectValue placeholder="Sort by" />
+                  <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
-                    <SelectItem value="date-desc">Date (Newest first)</SelectItem>
-                    <SelectItem value="date-asc">Date (Oldest first)</SelectItem>
-                    <SelectItem value="amount-desc">Amount (High to Low)</SelectItem>
-                    <SelectItem value="amount-asc">Amount (Low to High)</SelectItem>
+                  <SelectItem value="date-desc">Date (Newest first)</SelectItem>
+                  <SelectItem value="date-asc">Date (Oldest first)</SelectItem>
+                  <SelectItem value="amount-desc">
+                    Amount (High to Low)
+                  </SelectItem>
+                  <SelectItem value="amount-asc">
+                    Amount (Low to High)
+                  </SelectItem>
                 </SelectContent>
-                </Select>
+              </Select>
             </div>
           </div>
           {hasActiveFilters && (

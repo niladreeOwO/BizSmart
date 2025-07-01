@@ -5,10 +5,22 @@ import StatCard from '@/components/dashboard/stat-card';
 import IncomeExpenseChart from '@/components/dashboard/income-expense-chart';
 import ExpenseBreakdownChart from '@/components/dashboard/expense-breakdown-chart';
 import { formatCurrency } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { PlusCircle } from 'lucide-react';
+import AddEntryDialog from '@/components/transactions/add-entry-dialog';
 
 export default function DashboardPage() {
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+
   return (
     <div className="flex flex-col gap-8 motion-safe:animate-fade-in">
+      <div className="flex justify-end">
+        <Button onClick={() => setIsDialogOpen(true)}>
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Quick Entry
+        </Button>
+        <AddEntryDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
+      </div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           title="Income"

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/auth-context';
+import { TransactionsProvider } from '@/context/transactions-context';
 
 export const metadata: Metadata = {
   title: 'BizSmart Dashboard',
@@ -25,8 +26,10 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased" suppressHydrationWarning>
         <AuthProvider>
-          {children}
-          <Toaster />
+          <TransactionsProvider>
+            {children}
+            <Toaster />
+          </TransactionsProvider>
         </AuthProvider>
       </body>
     </html>
