@@ -37,15 +37,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '../ui/sheet';
-import AIAssistant from '../chat/ai-assistant';
-
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/dashboard/transactions', label: 'Transactions', icon: Wallet },
-  { href: '/dashboard/insights', label: 'AI Insights', icon: BrainCircuit },
-  { href: '/dashboard/settings', label: 'Settings', icon: Settings },
+  { href: '/transactions', label: 'Transactions', icon: Wallet },
+  { href: '/insights', label: 'AI Insights', icon: BrainCircuit },
+  { href: '/assistant', label: 'AI Assistant', icon: MessageCircle },
+  { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
 const AppSidebarHeader = () => {
@@ -69,7 +67,6 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { toggleSidebar } = useSidebar();
   const { user, logout } = useAuth();
-  const [isAssistantOpen, setAssistantOpen] = React.useState(false);
 
   const currentNavItem = navItems
     .slice()
@@ -86,7 +83,11 @@ function AppShell({ children }: { children: React.ReactNode }) {
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
                   asChild
-                  isActive={item.href === '/' ? pathname === item.href : pathname.startsWith(item.href)}
+                  isActive={
+                    item.href === '/dashboard'
+                      ? pathname === item.href
+                      : pathname.startsWith(item.href)
+                  }
                   tooltip={item.label}
                 >
                   <Link href={item.href}>
@@ -96,30 +97,21 @@ function AppShell({ children }: { children: React.ReactNode }) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
-             <SidebarMenuItem>
-                <SidebarMenuButton
-                  onClick={() => setAssistantOpen(true)}
-                  tooltip="AI Assistant"
-                >
-                  <MessageCircle className="h-5 w-5" />
-                  <span>AI Assistant</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter className="p-4 mt-auto group-data-[state=collapsed]:p-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button
-                className="w-full justify-start group-data-[state=collapsed]:justify-center gap-2 p-2 h-auto flex items-center rounded-md hover:bg-sidebar-accent"
-              >
+              <button className="w-full justify-start group-data-[state=collapsed]:justify-center gap-2 p-2 h-auto flex items-center rounded-md hover:bg-sidebar-accent">
                 <Avatar className="h-8 w-8">
                   <AvatarImage
                     src={user?.photoURL ?? 'https://placehold.co/40x40.png'}
                     alt={user?.displayName ?? 'User'}
                     data-ai-hint="person avatar"
                   />
-                  <AvatarFallback>{user?.email?.[0].toUpperCase()}</AvatarFallback>
+                  <AvatarFallback>
+                    {user?.email?.[0].toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="text-left hidden group-data-[expanded]:block">
                   <p className="text-base font-medium truncate">
@@ -132,12 +124,12 @@ function AppShell({ children }: { children: React.ReactNode }) {
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent side="right" align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Log out</span>
-                </DropdownMenuItem>
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={logout}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarFooter>
@@ -145,7 +137,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
 
       <SidebarInset className="flex-1 bg-background">
         <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b bg-background/80 backdrop-blur-sm px-6">
-           <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="icon"
@@ -159,11 +151,8 @@ function AppShell({ children }: { children: React.ReactNode }) {
               {currentNavItem?.label || 'Dashboard'}
             </h2>
           </div>
-           <div className="md:hidden">
-            <Link
-              href="/dashboard"
-              className="flex items-center gap-2"
-            >
+          <div className="md:hidden">
+            <Link href="/dashboard" className="flex items-center gap-2">
               <BotMessageSquare className="h-8 w-8 text-primary shrink-0" />
               <h1 className="text-xl font-bold font-headline text-foreground">
                 BizSmart
@@ -173,18 +162,6 @@ function AppShell({ children }: { children: React.ReactNode }) {
         </header>
         <main className="flex-1 p-6">{children}</main>
       </SidebarInset>
-
-      <Sheet open={isAssistantOpen} onOpenChange={setAssistantOpen}>
-        <SheetContent className="w-full max-w-lg p-0">
-           <SheetHeader className="p-4 border-b">
-            <SheetTitle className="flex items-center gap-2">
-                <BotMessageSquare className="h-6 w-6 text-primary" />
-                <span>AI Assistant</span>
-            </SheetTitle>
-          </SheetHeader>
-          <AIAssistant />
-        </SheetContent>
-      </Sheet>
     </div>
   );
 }
