@@ -6,7 +6,7 @@ import type { FinancialInsight } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Terminal } from 'lucide-react';
+import { Terminal, Flame, Target, WandSparkles, BrainCircuit } from 'lucide-react';
 import InsightCard from './insight-card';
 import {
   Card,
@@ -15,7 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from '../ui/card';
-import { Flame, Target, WandSparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { formatCurrency } from '@/lib/utils';
 
@@ -66,7 +65,7 @@ export default function InsightsView() {
     return (
       <Alert variant="destructive">
         <Terminal className="h-4 w-4" />
-        <AlertTitle>Error</AlertTitle>
+        <AlertTitle>Oops, something went wrong!</AlertTitle>
         <AlertDescription>{error}</AlertDescription>
         <Button onClick={fetchInsights} variant="secondary" className="mt-4">
           Retry
@@ -77,8 +76,8 @@ export default function InsightsView() {
 
   if (!insights) {
     return (
-      <div className="text-center">
-        <p>No insights available.</p>
+      <div className="text-center text-muted-foreground">
+        <p>No insights available yet. Let's generate your first report!</p>
         <Button onClick={fetchInsights} className="mt-4">
           Generate Insights
         </Button>
@@ -93,19 +92,19 @@ export default function InsightsView() {
       </Button>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <InsightCard
-          title="Monthly Burn Rate"
+          title="Monthly Burn Rate 🔥"
           value={formatCurrency(insights.burnRate)}
           icon={Flame}
           color="text-orange-500"
         />
         <InsightCard
-          title="Top Expense Category"
+          title="Top Expense Category 🎯"
           value={insights.topExpenseCategory}
           icon={Target}
           color="text-red-500"
         />
         <InsightCard
-          title="Financial Summary"
+          title="Financial Summary 📊"
           value={insights.summary}
           icon={WandSparkles}
           color="text-blue-500"
@@ -114,13 +113,16 @@ export default function InsightsView() {
       </div>
       <Card>
         <CardHeader className="border-b">
-          <CardTitle>AI Suggestions</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <BrainCircuit className="text-primary"/>
+            <span>AI Suggestions</span>
+          </CardTitle>
           <CardDescription>
             Actionable advice to improve your financial health.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <ul className="space-y-2 list-disc list-inside text-muted-foreground">
+        <CardContent className="pt-6">
+          <ul className="space-y-3 list-disc list-inside text-muted-foreground">
             {insights.suggestions.map((suggestion, index) => (
               <li key={index} className="break-words">{suggestion}</li>
             ))}

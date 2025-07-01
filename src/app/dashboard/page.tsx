@@ -6,7 +6,7 @@ import {
   ArrowUpCircle,
   Landmark,
   Banknote,
-  Upload,
+  PlusCircle,
   Lightbulb,
 } from 'lucide-react';
 import StatCard from '@/components/dashboard/stat-card';
@@ -32,8 +32,10 @@ import { Badge } from '@/components/ui/badge';
 import { format, startOfWeek, endOfWeek, startOfMonth, endOfMonth } from 'date-fns';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/context/auth-context';
 
 export default function DashboardPage() {
+  const { user } = useAuth();
   const [filter, setFilter] = React.useState('month');
 
   const filteredTransactions = React.useMemo(() => {
@@ -73,11 +75,13 @@ export default function DashboardPage() {
 
   // Mock data for new widgets
   const cashOnHand = 54200.75;
+  const welcomeName = user?.displayName?.split(' ')[0] || 'SME Owner';
+
 
   return (
     <div className="flex flex-col gap-6 motion-safe:animate-fade-in">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h1 className="text-3xl font-bold">Dashboard</h1>
+            <h1 className="text-3xl font-bold">Welcome back, {welcomeName}!</h1>
             <Tabs defaultValue={filter} onValueChange={setFilter} className="w-full sm:w-auto">
                 <TabsList className="w-full">
                     <TabsTrigger value="today" className="flex-1">Today</TabsTrigger>
@@ -92,7 +96,7 @@ export default function DashboardPage() {
             title="Total Income"
             value={formatCurrency(totalIncome)}
             icon={ArrowUpCircle}
-            description="Income for the selected period"
+            description={`You earned this period 🎉`}
             color="text-primary"
             />
             <StatCard
@@ -125,12 +129,12 @@ export default function DashboardPage() {
                         <div>
                             <CardTitle>Transactions</CardTitle>
                             <CardDescription>
-                            Transactions for the selected period.
+                            Your recent financial activity.
                             </CardDescription>
                         </div>
-                        <Button variant="outline" className="w-full sm:w-auto">
-                            <Upload className="mr-2 h-4 w-4" />
-                            Upload CSV or Receipt
+                        <Button className="w-full sm:w-auto">
+                            <PlusCircle className="mr-2 h-4 w-4" />
+                            Add Transaction
                         </Button>
                     </CardHeader>
                     <CardContent className="p-0">
@@ -180,8 +184,8 @@ export default function DashboardPage() {
                             ))
                         ) : (
                             <TableRow>
-                            <TableCell colSpan={5} className="h-24 text-center">
-                                No transactions found for this period.
+                            <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                                No transactions yet — let’s add your first one!
                             </TableCell>
                             </TableRow>
                         )}
@@ -195,7 +199,7 @@ export default function DashboardPage() {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
                             <Lightbulb className="text-yellow-500" />
-                            BizSmart Says...
+                             BizSmart Tip of the Day
                         </CardTitle>
                     </CardHeader>
                     <CardContent>

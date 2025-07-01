@@ -212,7 +212,7 @@ export default function TransactionsPage() {
           filteredTransactions.map((t) => <TransactionCard key={t.id} transaction={t} />)
         ) : (
           <div className="text-center py-12 text-muted-foreground">
-            No transactions found.
+            No transactions found for this filter. Let's try another!
           </div>
         )}
       </div>
@@ -266,8 +266,8 @@ export default function TransactionsPage() {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="h-24 text-center">
-                  No transactions found.
+                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                  No transactions found for this filter. Let's try another!
                 </TableCell>
               </TableRow>
             )}
