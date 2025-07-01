@@ -1,4 +1,11 @@
-import type { User as FirebaseUser } from 'firebase/auth';
+// Since we are removing Firebase, we define a simple User type.
+// When re-integrating Firebase, this should be aliased back to the original FirebaseUser.
+export type User = {
+  uid: string;
+  email: string | null;
+  displayName: string | null;
+  photoURL: string | null;
+};
 
 export type Transaction = {
   id: string;
@@ -17,5 +24,3 @@ export type FinancialInsight = {
   topExpenseCategory: string;
   suggestions: string[];
 };
-
-export type User = FirebaseUser;

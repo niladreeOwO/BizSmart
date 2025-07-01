@@ -1,12 +1,17 @@
 'use client';
 
 import * as React from 'react';
-import { onIdTokenChanged } from 'firebase/auth';
-import { auth } from '@/lib/firebase';
 import type { User } from '@/lib/types';
-import { logout as serverLogout } from '@/app/auth/actions';
-import { Skeleton } from '@/components/ui/skeleton';
 import { BotMessageSquare } from 'lucide-react';
+
+// Create a mock user for display purposes
+const mockUser: User = {
+  uid: 'mock_user_123',
+  email: 'sme.owner@example.com',
+  displayName: 'SME Owner',
+  photoURL: 'https://placehold.co/40x40.png',
+};
+
 
 interface AuthContextType {
   user: User | null;
@@ -21,29 +26,21 @@ const AuthContext = React.createContext<AuthContextType>({
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = React.useState<User | null>(null);
-  const [loading, setLoading] = React.useState(true);
-
-  React.useEffect(() => {
-    const unsubscribe = onIdTokenChanged(auth, async (user) => {
-      setUser(user);
-      setLoading(false);
-    });
-
-    return () => unsubscribe();
-  }, []);
-
+  // In this mock setup, loading is always false and we have a static user.
+  const loading = false;
+  
   const logout = async () => {
-    await serverLogout();
-    setUser(null);
+    // In a real app, this would clear the session. Here, it does nothing.
+    console.log("Mock logout initiated. In a real app, you would be redirected.");
   };
 
   const value = {
-    user,
+    user: mockUser,
     loading,
     logout,
   };
 
+  // The loading screen is kept for visual consistency, even though it's instant.
   if (loading) {
      return (
         <div className="flex h-screen w-full items-center justify-center bg-background">
