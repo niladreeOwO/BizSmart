@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   SidebarProvider,
   Sidebar,
@@ -25,7 +25,6 @@ import {
   PanelLeft,
   Settings,
   LogOut,
-  MessageCircle,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
@@ -37,12 +36,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Skeleton } from '../ui/skeleton';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/transactions', label: 'Transactions', icon: Wallet },
   { href: '/insights', label: 'AI Insights', icon: BrainCircuit },
-  { href: '/assistant', label: 'AI Assistant', icon: MessageCircle },
   { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
@@ -113,7 +112,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
                     {user?.email?.[0].toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
-                <div className="text-left hidden group-data-[expanded]:block">
+                <div className="text-left group-data-[state=collapsed]:hidden">
                   <p className="text-base font-medium truncate">
                     {user?.displayName || 'SME Owner'}
                   </p>
@@ -166,11 +165,57 @@ function AppShell({ children }: { children: React.ReactNode }) {
   );
 }
 
+function MainLayoutLoader() {
+    return (
+        <div className="flex min-h-screen">
+            <div className="hidden md:flex flex-col gap-4 border-r bg-muted/40 p-2">
+                <div className="flex h-16 items-center justify-center">
+                    <BotMessageSquare className="h-8 w-8 text-primary" />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <Skeleton className="h-8 w-8 rounded-lg" />
+                    <Skeleton className="h-8 w-8 rounded-lg" />
+                    <Skeleton className="h-8 w-8 rounded-lg" />
+                    <Skeleton className="h-8 w-8 rounded-lg" />
+                </div>
+                <div className="mt-auto flex justify-center p-2">
+                     <Skeleton className="h-8 w-8 rounded-full" />
+                </div>
+            </div>
+            <div className="flex-1 flex flex-col">
+                <header className="sticky top-0 z-10 flex h-16 items-center border-b px-6">
+                    <Skeleton className="h-8 w-40" />
+                </header>
+                <main className="flex-1 p-6">
+                    <div className="space-y-4">
+                        <Skeleton className="h-10 w-1/2" />
+                        <Skeleton className="h-32 w-full" />
+                        <Skeleton className="h-64 w-full" />
+                    </div>
+                </main>
+            </div>
+        </div>
+    )
+}
+
 export default function MainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (!loading && !user) {
+      router.replace('/login');
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return <MainLayoutLoader />;
+  }
+
   return (
     <SidebarProvider>
       <AppShell>{children}</AppShell>

@@ -101,6 +101,36 @@ export const transactions: Transaction[] = [
     paymentMethod: 'Credit Card',
     description: 'Adobe Creative Cloud',
   },
+  {
+    id: 'txn_11',
+    userId: 'user_123',
+    amount: 3200,
+    type: 'income',
+    category: 'Client Project C',
+    date: '2024-06-25T10:00:00Z',
+    paymentMethod: 'Bank Transfer',
+    description: 'Upfront payment for project C',
+  },
+  {
+    id: 'txn_12',
+    userId: 'user_123',
+    amount: 25.0,
+    type: 'expense',
+    category: 'Office Supplies',
+    date: '2024-06-28T11:00:00Z',
+    paymentMethod: 'Cash',
+    description: 'Coffee for the team',
+  },
+  {
+    id: 'txn_13',
+    userId: 'user_123',
+    amount: 150.0,
+    type: 'expense',
+    category: 'Utilities',
+    date: '2024-06-30T12:00:00Z',
+    paymentMethod: 'bKash',
+    description: 'Electricity Bill',
+  },
 ];
 
 export const categories = [

@@ -154,15 +154,31 @@ export default function TransactionsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Filter className="h-5 w-5" />
-            <span>Filter & Sort Transactions</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-lg bg-card">
+        <div className="flex items-center gap-2 text-lg font-semibold">
+           <Filter className="h-5 w-5" />
+           <span>Filters & Controls</span>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-2">
+            <Button onClick={() => setIsDialogOpen(true)} className="w-full sm:w-auto">
+              <PlusCircle className="mr-2" />
+              Add Transaction
+            </Button>
+            <AddEntryDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
+             {hasActiveFilters && (
+            <Button
+              variant="ghost"
+              onClick={clearFilters}
+              className="w-full sm:w-auto"
+            >
+              <X className="mr-2 h-4 w-4" />
+              Clear
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
             <Select value={category} onValueChange={setCategory}>
               <SelectTrigger>
                 <SelectValue placeholder="Filter by category" />
@@ -225,18 +241,9 @@ export default function TransactionsPage() {
                 />
               </PopoverContent>
             </Popover>
-          </div>
-          <div className="flex flex-col md:flex-row items-center gap-4 pt-4 border-t mt-4">
-            <Button onClick={() => setIsDialogOpen(true)}>
-              <PlusCircle className="mr-2" />
-              Add Transaction
-            </Button>
-            <AddEntryDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
-
-            <div className="flex items-center gap-2">
-              <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
+             <div className="flex items-center gap-2">
               <Select value={sortConfig} onValueChange={setSortConfig}>
-                <SelectTrigger className="w-full md:w-[220px]">
+                <SelectTrigger className="w-full">
                   <SelectValue placeholder="Sort by" />
                 </SelectTrigger>
                 <SelectContent>
@@ -251,19 +258,7 @@ export default function TransactionsPage() {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-          {hasActiveFilters && (
-            <Button
-              variant="ghost"
-              onClick={clearFilters}
-              className="self-start mt-4"
-            >
-              <X className="mr-2 h-4 w-4" />
-              Clear Filters
-            </Button>
-          )}
-        </CardContent>
-      </Card>
+      </div>
 
       {/* Mobile View: Card List */}
       <div className="flex flex-col gap-4 md:hidden">

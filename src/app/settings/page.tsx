@@ -21,8 +21,18 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
 
 export default function SettingsPage() {
+  const { toast } = useToast();
+
+  const handleSaveChanges = (section: string) => {
+    toast({
+      title: `${section} Settings Saved`,
+      description: `Your ${section.toLowerCase()} information has been updated.`,
+    });
+  };
+
   return (
     <div className="flex flex-col gap-8">
       <div>
@@ -64,7 +74,7 @@ export default function SettingsPage() {
           </div>
         </CardContent>
         <CardFooter className="border-t pt-6">
-          <Button>Save Changes</Button>
+          <Button onClick={() => handleSaveChanges('Company')}>Save Changes</Button>
         </CardFooter>
       </Card>
       
@@ -95,7 +105,7 @@ export default function SettingsPage() {
           </div>
         </CardContent>
         <CardFooter className="border-t pt-6">
-          <Button>Save Changes</Button>
+          <Button onClick={() => handleSaveChanges('Finance')}>Save Changes</Button>
         </CardFooter>
       </Card>
 
@@ -128,7 +138,7 @@ export default function SettingsPage() {
           </div>
         </CardContent>
         <CardFooter className="border-t pt-6">
-          <Button>Save Preferences</Button>
+          <Button onClick={() => handleSaveChanges('Notification')}>Save Preferences</Button>
         </CardFooter>
       </Card>
     </div>
