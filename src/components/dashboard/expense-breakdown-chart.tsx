@@ -7,6 +7,7 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  Cell,
 } from 'recharts';
 import {
   Card,
@@ -26,6 +27,15 @@ const data = [
   { name: 'Other', value: 200 },
 ];
 
+const COLORS = [
+  'hsl(var(--chart-1))',
+  'hsl(var(--chart-2))',
+  'hsl(var(--chart-3))',
+  'hsl(var(--chart-4))',
+  'hsl(var(--chart-5))',
+  'hsl(var(--chart-1))', // Repeat for 'Other'
+];
+
 export default function ExpenseBreakdownChart() {
   return (
     <Card>
@@ -43,7 +53,7 @@ export default function ExpenseBreakdownChart() {
           <BarChart
             data={data}
             layout="vertical"
-            margin={{ top: 5, right: 0, left: 0, bottom: 5 }}
+            margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
           >
             <XAxis type="number" hide />
             <YAxis
@@ -53,7 +63,7 @@ export default function ExpenseBreakdownChart() {
               axisLine={false}
               stroke="hsl(var(--muted-foreground))"
               fontSize={12}
-              width={60}
+              width={90}
             />
             <Tooltip
               contentStyle={{
@@ -62,14 +72,20 @@ export default function ExpenseBreakdownChart() {
                 background: 'hsl(var(--background))',
               }}
               cursor={{ fill: 'hsl(var(--accent))', radius: 'var(--radius)' }}
+              formatter={(value: number) => [formatCurrency(value), 'Expense']}
             />
             <Bar
               dataKey="value"
-              fill="hsl(var(--muted))"
               background={{ fill: 'hsl(var(--secondary))' }}
               radius={4}
-              name="Expense"
-            />
+            >
+              {data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
+              ))}
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </CardContent>
