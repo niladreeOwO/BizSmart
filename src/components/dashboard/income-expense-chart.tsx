@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import {
   Bar,
   BarChart,
@@ -27,7 +28,7 @@ const data = [
   { name: 'Jun', income: 7390 },
 ];
 
-export default function IncomeExpenseChart() {
+const IncomeExpenseChart = React.memo(function IncomeExpenseChart() {
   return (
     <Card>
       <CardHeader>
@@ -79,4 +80,6 @@ export default function IncomeExpenseChart() {
       </CardContent>
     </Card>
   );
-}
+});
+
+export default IncomeExpenseChart;

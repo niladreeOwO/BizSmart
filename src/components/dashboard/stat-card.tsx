@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
@@ -7,7 +8,11 @@ interface StatCardProps {
   change: string;
 }
 
-export default function StatCard({ title, value, change }: StatCardProps) {
+const StatCard = React.memo(function StatCard({
+  title,
+  value,
+  change,
+}: StatCardProps) {
   const isPositive = change.startsWith('+');
 
   return (
@@ -26,4 +31,6 @@ export default function StatCard({ title, value, change }: StatCardProps) {
       </div>
     </Card>
   );
-}
+});
+
+export default StatCard;

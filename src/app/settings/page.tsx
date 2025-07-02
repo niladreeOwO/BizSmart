@@ -117,7 +117,7 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between space-x-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <Label htmlFor="email-alerts" className="flex flex-col space-y-1">
               <span>Email Alerts</span>
               <span className="font-normal leading-snug text-muted-foreground">
@@ -127,7 +127,7 @@ export default function SettingsPage() {
             <Switch id="email-alerts" />
           </div>
           <Separator />
-           <div className="flex items-center justify-between space-x-2">
+           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
             <Label htmlFor="ai-tips" className="flex flex-col space-y-1">
               <span>AI Tips</span>
               <span className="font-normal leading-snug text-muted-foreground">

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
@@ -9,7 +10,7 @@ interface InsightCardProps {
   isSummary?: boolean;
 }
 
-export default function InsightCard({
+const InsightCard = React.memo(function InsightCard({
   title,
   value,
   icon: Icon,
@@ -34,4 +35,6 @@ export default function InsightCard({
       </CardContent>
     </Card>
   );
-}
+});
+
+export default InsightCard;

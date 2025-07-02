@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import {
   Bar,
   BarChart,
@@ -36,7 +37,7 @@ const COLORS = [
   'hsl(var(--chart-1))', // Repeat for 'Other'
 ];
 
-export default function ExpenseBreakdownChart() {
+const ExpenseBreakdownChart = React.memo(function ExpenseBreakdownChart() {
   return (
     <Card>
       <CardHeader>
@@ -90,4 +91,6 @@ export default function ExpenseBreakdownChart() {
       </CardContent>
     </Card>
   );
-}
+});
+
+export default ExpenseBreakdownChart;

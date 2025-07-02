@@ -47,7 +47,11 @@ import AddEntryDialog from '@/components/transactions/add-entry-dialog';
 import { useTransactions } from '@/context/transactions-context';
 
 // Mobile-first Transaction Card component
-function TransactionCard({ transaction }: { transaction: Transaction }) {
+const TransactionCard = React.memo(function TransactionCard({
+  transaction,
+}: {
+  transaction: Transaction;
+}) {
   return (
     <Card className="w-full">
       <CardHeader>
@@ -90,7 +94,8 @@ function TransactionCard({ transaction }: { transaction: Transaction }) {
       </CardFooter>
     </Card>
   );
-}
+});
+TransactionCard.displayName = 'TransactionCard';
 
 export default function TransactionsPage() {
   const { transactions } = useTransactions();

@@ -1,9 +1,18 @@
 import type { Metadata } from 'next';
+import { Poppins } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/auth-context';
 import { TransactionsProvider } from '@/context/transactions-context';
 import AIAssistantWidget from '@/components/chat/ai-assistant-widget';
+import { cn } from '@/lib/utils';
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-poppins',
+  weight: ['400', '500', '600', '700'],
+});
 
 export const metadata: Metadata = {
   title: 'BizSmart Dashboard',
@@ -17,15 +26,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="font-body antialiased" suppressHydrationWarning>
+      <body
+        className={cn(
+          'font-body antialiased',
+          poppins.variable
+        )}
+        suppressHydrationWarning
+      >
         <AuthProvider>
           <TransactionsProvider>
             {children}
