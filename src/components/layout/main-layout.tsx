@@ -166,7 +166,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
         <main className="flex-1 p-6">{children}</main>
-        <div className="absolute bottom-8 right-8 z-50 flex flex-col-reverse items-center gap-4">
+        <div className="fixed bottom-8 right-8 z-50 flex flex-col-reverse items-center gap-4">
           {showAddButton && (
             <Button
               onClick={() => setIsDialogOpen(true)}
