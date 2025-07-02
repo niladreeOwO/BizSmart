@@ -94,7 +94,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const showAddButton = pathname === '/dashboard';
 
   return (
-    <div className="flex min-h-screen">
+    <>
       <Sidebar className="flex flex-col group" collapsible="icon">
         <MobileSidebarHeader />
         <AppSidebarHeader />
@@ -197,7 +197,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
         </div>
         <AddEntryDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
       </SidebarInset>
-    </div>
+    </>
   );
 }
 
