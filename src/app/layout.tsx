@@ -4,7 +4,6 @@ import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/context/auth-context';
 import { TransactionsProvider } from '@/context/transactions-context';
-import AIAssistantWidget from '@/components/chat/ai-assistant-widget';
 import { cn } from '@/lib/utils';
 
 const poppins = Poppins({
@@ -36,7 +35,6 @@ export default function RootLayout({
         <AuthProvider>
           <TransactionsProvider>
             {children}
-            <AIAssistantWidget />
             <Toaster />
           </TransactionsProvider>
         </AuthProvider>

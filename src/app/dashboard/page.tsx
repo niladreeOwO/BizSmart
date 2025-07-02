@@ -5,13 +5,8 @@ import StatCard from '@/components/dashboard/stat-card';
 import IncomeExpenseChart from '@/components/dashboard/income-expense-chart';
 import ExpenseBreakdownChart from '@/components/dashboard/expense-breakdown-chart';
 import { formatCurrency } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import AddEntryDialog from '@/components/transactions/add-entry-dialog';
 
 export default function DashboardPage() {
-  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
-
   return (
     <>
       <div className="flex flex-col gap-8 motion-safe:animate-fade-in">
@@ -50,17 +45,6 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
-
-      <AddEntryDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
-
-      <Button
-        onClick={() => setIsDialogOpen(true)}
-        className="fixed bottom-28 right-8 h-16 w-16 rounded-full shadow-lg"
-        size="icon"
-        aria-label="Add Quick Entry"
-      >
-        <Plus className="h-8 w-8" />
-      </Button>
     </>
   );
 }

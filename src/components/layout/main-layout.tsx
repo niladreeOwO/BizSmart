@@ -25,6 +25,7 @@ import {
   PanelLeft,
   Settings,
   LogOut,
+  Plus,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/context/auth-context';
@@ -37,6 +38,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Skeleton } from '../ui/skeleton';
+import AddEntryDialog from '../transactions/add-entry-dialog';
+import AIAssistantWidget from '../chat/ai-assistant-widget';
 
 const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -66,11 +69,14 @@ function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { toggleSidebar } = useSidebar();
   const { user, logout } = useAuth();
+  const [isDialogOpen, setIsDialogOpen] = React.useState(false);
 
   const currentNavItem = navItems
     .slice()
     .sort((a, b) => b.href.length - a.href.length)
     .find((item) => pathname.startsWith(item.href));
+
+  const showAddButton = pathname === '/dashboard';
 
   return (
     <div className="flex min-h-screen">
@@ -160,6 +166,20 @@ function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
         <main className="flex-1 p-6">{children}</main>
+        <div className="absolute bottom-8 right-8 z-50 flex flex-col-reverse items-center gap-4">
+          {showAddButton && (
+            <Button
+              onClick={() => setIsDialogOpen(true)}
+              className="h-16 w-16 rounded-full shadow-lg"
+              size="icon"
+              aria-label="Add Quick Entry"
+            >
+              <Plus className="h-8 w-8" />
+            </Button>
+          )}
+          <AIAssistantWidget />
+        </div>
+        <AddEntryDialog isOpen={isDialogOpen} setIsOpen={setIsDialogOpen} />
       </SidebarInset>
     </div>
   );

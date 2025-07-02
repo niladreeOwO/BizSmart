@@ -14,7 +14,7 @@ export default function AIAssistantWidget() {
       <Button
         size="icon"
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-8 right-8 h-16 w-16 rounded-full shadow-lg z-50"
+        className="h-16 w-16 rounded-full shadow-lg"
         aria-label="Open AI Assistant"
       >
         <BotMessageSquare className="h-8 w-8" />
