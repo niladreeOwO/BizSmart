@@ -65,6 +65,21 @@ const AppSidebarHeader = () => {
   );
 };
 
+const MobileSidebarHeader = () => {
+  const { setOpenMobile } = useSidebar();
+  return (
+    <div className="p-4 border-b border-sidebar-border md:hidden">
+        <button onClick={() => setOpenMobile(false)} className="flex items-center w-full gap-2 text-left">
+            <BotMessageSquare className="h-8 w-8 text-primary shrink-0" />
+            <h1 className="text-xl font-bold font-headline text-foreground">
+                BizSmart
+            </h1>
+        </button>
+    </div>
+  );
+};
+
+
 function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { toggleSidebar } = useSidebar();
@@ -81,6 +96,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen">
       <Sidebar className="flex flex-col group" collapsible="icon">
+        <MobileSidebarHeader />
         <AppSidebarHeader />
         <SidebarContent className="flex-1 p-4">
           <SidebarMenu>
@@ -166,7 +182,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </header>
         <main className="flex-1 p-6">{children}</main>
-        <div className="fixed bottom-8 right-8 z-50 flex flex-col-reverse items-center gap-4">
+        <div className="fixed bottom-6 right-6 z-50 flex flex-col-reverse items-center gap-4">
           {showAddButton && (
             <Button
               onClick={() => setIsDialogOpen(true)}
