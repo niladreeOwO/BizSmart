@@ -34,7 +34,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
+    <div className="mx-auto w-full max-w-5xl">
       <div className="flex flex-col gap-8">
         <div>
           <h1 className="text-3xl font-bold">Settings</h1>
